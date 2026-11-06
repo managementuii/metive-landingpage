@@ -82,7 +82,7 @@
 /* Compact benefits: small icons and short copy, no oversized artwork. */
 .metive-perks{padding:45px 0;background:#f0f4fa;border-top:1px solid #dce3ed;border-bottom:1px solid #dce3ed}
 .metive-perks>.wrap{max-width:1100px}
-.metive-perks h2{font-size:clamp(25px,2.8vw,34px);line-height:1.2;letter-spacing:-1px;margin:0 0 26px}
+.metive-perks h2{font-size:clamp(32px,4vw,49px);line-height:1.13;letter-spacing:-2px;margin:0 0 26px}
 .perks-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 42px}
 .perk{display:flex;align-items:flex-start;gap:15px;min-width:0;padding-top:18px;border-top:1px solid #cbd5e3}
 .perk-icon{display:grid;place-items:center;width:43px;height:43px;flex:0 0 43px;background:var(--yellow);color:var(--blue);border:1px solid var(--blue);box-shadow:2px 2px 0 #b9c7dc}
@@ -90,7 +90,7 @@
 .perk-icon svg{width:27px;height:29px}
 .perk h3{font-size:18px;line-height:1.35;letter-spacing:-.35px;color:var(--blue);margin:0 0 7px}
 .perk p{font-size:13px;line-height:1.65;color:var(--muted);margin:0;max-width:390px}
-@media(max-width:760px){.metive-perks{padding:30px 0}.metive-perks h2{font-size:25px;margin-bottom:18px}.perks-grid{gap:20px 18px}.perk{display:block;padding-top:14px}.perk-icon{width:34px;height:34px;margin-bottom:11px;box-shadow:2px 2px 0 #b9c7dc}.perk-icon svg{width:22px;height:24px}.perk h3{font-size:15px;line-height:1.35;letter-spacing:-.2px;margin-bottom:6px}.perk p{font-size:12px;line-height:1.6}}
+@media(max-width:760px){.metive-perks{padding:30px 0}.metive-perks h2{font-size:32px;letter-spacing:-1.2px;margin-bottom:22px}.perks-grid{gap:20px 18px}.perk{display:block;padding-top:14px}.perk-icon{width:34px;height:34px;margin-bottom:11px;box-shadow:2px 2px 0 #b9c7dc}.perk-icon svg{width:22px;height:24px}.perk h3{font-size:15px;line-height:1.35;letter-spacing:-.2px;margin-bottom:6px}.perk p{font-size:12px;line-height:1.6}}
 @media(max-width:350px){.perks-grid{grid-template-columns:1fr;gap:14px}.perk{display:flex;gap:12px}.perk-icon{flex-basis:34px;margin:0}}
 
 
@@ -110,6 +110,15 @@
 @media(max-width:760px){.perks-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.perk{display:flex;gap:0;padding:17px 14px;box-shadow:3px 3px 0 #b9c7dc}.perk .perk-icon,.perk:nth-child(2) .perk-icon,.perk:nth-child(3) .perk-icon{width:36px;height:36px;margin:0 0 14px}.perk .perk-icon svg{width:36px;height:36px}.perk h3{font-size:15px;line-height:1.35;letter-spacing:-.25px;margin-bottom:8px}.perk p{font-size:12px;line-height:1.6}}
 @media(max-width:350px){.perks-grid{grid-template-columns:1fr}.perk{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px}.perk .perk-icon{margin:0}}
 
+/* Subtle hover lift on devices with a precise pointer. */
+@media(hover:hover) and (pointer:fine){
+  .metive-perks .perk{position:relative;transition:transform 200ms ease,box-shadow 200ms ease}
+  .metive-perks .perk:hover{transform:translateY(-3px) scale(1.025);box-shadow:6px 7px 0 #b9c7dc;z-index:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .metive-perks .perk{transition:none}
+  .metive-perks .perk:hover{transform:none}
+}
 </style>
 </head>
 <body>
