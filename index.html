@@ -417,6 +417,9 @@
 
 /* The active deck card grows only with its own content. */
 .recruitment-timeline.is-deck,.is-deck .recruitment-step{height:auto;min-height:0}
+
+/* Stable deck height; expanded content scrolls inside its own card. */
+.recruitment-timeline.is-deck .recruitment-step{height:var(--deck-card-height,auto);min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#9eafc9 transparent;scroll-padding:20px}
 </style>
 </head>
 <body>
@@ -825,6 +828,50 @@ document.querySelectorAll('.project-video').forEach(video=>{
  ['play','pause','ended','error'].forEach(name=>video.addEventListener(name,reflect));
  reflect();
 });
+
+
+/* Measure closed copies at the visible track width, never a hidden card width. */
+(() => {
+ const track=document.querySelector('#recruitment-track');
+ const cards=[...track.querySelectorAll('.recruitment-step')];
+ let scheduled=false,lastWidth=0;
+ function measure(){
+  scheduled=false;
+  const width=track.getBoundingClientRect().width;
+  if(width<1)return;
+  lastWidth=width;
+  let tallest=0;
+  for(const card of cards){
+   const clone=card.cloneNode(true);
+   clone.hidden=false;
+   clone.removeAttribute('id');
+   clone.setAttribute('aria-hidden','true');clone.inert=true;
+   clone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+   clone.querySelectorAll('details').forEach(el=>el.open=false);
+   Object.assign(clone.style,{position:'fixed',left:'-10000px',top:'0',width:width+'px',height:'auto',minHeight:'0',maxHeight:'none',overflow:'visible',visibility:'hidden',pointerEvents:'none',display:'block'});
+   track.appendChild(clone);
+   tallest=Math.max(tallest,clone.getBoundingClientRect().height);
+   clone.remove();
+  }
+  track.style.setProperty('--deck-card-height',Math.ceil(tallest+8)+'px');
+ }
+ function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(measure);}}
+ if('ResizeObserver' in window)new ResizeObserver(entries=>{
+  if(Math.abs(entries[0].contentRect.width-lastWidth)>.5)schedule();
+ }).observe(track);
+ window.addEventListener('resize',schedule);
+ if(document.fonts)document.fonts.ready.then(schedule);
+ cards.forEach(card=>{
+  const detail=card.querySelector('details');
+  if(detail)detail.addEventListener('toggle',()=>{
+   if(detail.open){
+    const top=detail.offsetTop-card.offsetTop;
+    if(top>card.clientHeight-60)card.scrollTo({top:top-24,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+   }else card.scrollTop=0;
+  });
+ });
+ schedule();
+})();
 
 </script>
 </body>
