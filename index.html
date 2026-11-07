@@ -348,13 +348,13 @@
 .top{background:var(--paper);border-bottom:1px solid transparent;transition:transform 240ms ease,background-color 240ms ease,border-color 240ms ease;will-change:transform}
 .top.is-scrolled{background:rgba(248,248,242,.88);border-bottom-color:#193c9114;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .top.is-hidden{transform:translateY(-105%)}
-.top .nav{height:70px;justify-content:flex-start;gap:0}
+.top .nav{height:auto;min-height:90px;padding-top:22px;padding-bottom:22px;justify-content:center;gap:0}
 .top .brand{gap:12px}
 .top .brand .brand-uii{width:132px;max-height:46px}
 .top .brand img:not(.brand-uii){width:76px;max-height:46px}
 .top .brand-divider{height:32px}
 .top .brand:focus-visible{outline:2px solid var(--blue);outline-offset:6px;border-radius:2px}
-@media(max-width:760px){.top .nav{height:60px}.top .brand{gap:9px}.top .brand .brand-uii{width:96px;max-height:38px}.top .brand img:not(.brand-uii){width:55px;max-height:38px}.top .brand-divider{height:26px}}
+@media(max-width:760px){.top .nav{height:auto;min-height:78px;padding-top:20px;padding-bottom:20px}.top .brand{gap:9px}.top .brand .brand-uii{width:96px;max-height:38px}.top .brand img:not(.brand-uii){width:55px;max-height:38px}.top .brand-divider{height:26px}}
 @media(prefers-reduced-motion:reduce){.top{transition:none}}
 </style>
 </head>
