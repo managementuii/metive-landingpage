@@ -374,7 +374,7 @@
 .metive-perks .perk:hover{box-shadow:3px 5px 0 #193c9124}
 .selection-box{border-radius:var(--card-radius)}
 .recruitment-timeline{align-items:flex-start}
-.recruitment-step{min-height:var(--timeline-closed-height,0px)}
+.recruitment-step{min-height:0}
 .faq-group{margin-top:32px}
 .faq-section .faq-group h3{font-size:18px;letter-spacing:-.3px;margin:0 0 12px;color:var(--blue)}
 .video-playback{position:absolute;z-index:4;top:12px;right:12px;display:grid;place-items:center;width:40px;height:40px;border:1px solid #ffffff90;border-radius:50%;background:#101522b3;color:white;cursor:pointer;font-size:15px;box-shadow:0 2px 8px #0002}
@@ -414,6 +414,9 @@
 
 .process .section-head p{margin-bottom:0}
 .process .timeline-carousel #recruitment-track{margin-top:0}
+
+/* The active deck card grows only with its own content. */
+.recruitment-timeline.is-deck,.is-deck .recruitment-step{height:auto;min-height:0}
 </style>
 </head>
 <body>
@@ -799,33 +802,6 @@ updateRegistrationStatus();
 })();
 
 
-/* Match collapsed cards without stretching neighbours when details open. */
-(() => {
- const track=document.querySelector('#recruitment-track');
- const cards=[...track.querySelectorAll('.recruitment-step')];
- let queued=false;
- function measure(){
-  queued=false;
-  let max=0;
-  cards.forEach(card=>{
-   const clone=card.cloneNode(true);
-   clone.removeAttribute('aria-current');
-   clone.hidden=false;
-   clone.style.display='block';
-   clone.setAttribute('aria-hidden','true');
-   clone.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));
-   clone.querySelectorAll('details').forEach(detail=>detail.open=false);
-   Object.assign(clone.style,{position:'fixed',left:'-10000px',top:'0',visibility:'hidden',pointerEvents:'none',width:card.getBoundingClientRect().width+'px',minHeight:'0',height:'auto',flex:'none'});
-   track.appendChild(clone);max=Math.max(max,clone.getBoundingClientRect().height);clone.remove();
-  });
-  track.style.setProperty('--timeline-closed-height',Math.ceil(max)+'px');
- }
- function schedule(){if(!queued){queued=true;requestAnimationFrame(measure);}}
- window.addEventListener('resize',schedule);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedule();});
- if(document.fonts)document.fonts.ready.then(schedule);
- schedule();
-})();
 /* Visible playback controls reflect both automatic and manual playback. */
 document.querySelectorAll('.project-video').forEach(video=>{
  const button=video.parentElement.querySelector('.video-playback');
