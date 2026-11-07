@@ -266,6 +266,12 @@
 .timeline-controls button:focus-visible,.recruitment-timeline:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 @media(max-width:1000px){.recruitment-timeline{--card-width:calc((100% - 20px)/1.8)}}
 @media(max-width:760px){.recruitment-timeline{--card-width:86%;gap:14px}.recruitment-timeline::after{flex-basis:calc(100% - var(--card-width) - 14px)}.recruitment-step{padding:18px}.timeline-body h3{font-size:20px}.timeline-marker{margin-bottom:16px}.timeline-date{min-height:0}.timeline-controls{margin-bottom:32px}}
+
+/* Equal-height recruitment cards and yellow announcement stages. */
+.recruitment-timeline{align-items:stretch}
+.recruitment-timeline .recruitment-step:nth-child(2),
+.recruitment-timeline .recruitment-step:nth-child(5),
+.recruitment-timeline .recruitment-step:nth-child(7){background:var(--yellow)}
 </style>
 </head>
 <body>
