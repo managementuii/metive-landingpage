@@ -184,14 +184,29 @@ function draw(position){
  font(29,true);
  label('Rekrutmen Metive 5.0 (2027)',76,index<=0?460:319,blue);
  if(index===-1){
-  panel(78,488,123,58,sky,false);
-  box(81,491,117,9,blue);
-  font(31,true);label('18:00',96,534,blue);
+  const pixelRows=[
+   '11.....1',
+   '111...11',
+   '1111.11.',
+   '11.111.1',
+   '11..1.11',
+   '11....1.',
+   '11....11',
+   '11....11'
+  ];
+  const left=78,top=500,cell=27.5;
+  pixelRows.forEach((row,y)=>[...row].forEach((pixel,x)=>{
+   if(pixel==='1')box(left+x*cell,top+y*cell,cell,cell,blue);
+  }));
+  // Loose pixels extend the mark to its full 280 × 220 footprint.
+  box(left+230,top+37,22,22,sky);
+  box(left+262,top+9,18,18,yellow);
+  box(left+224,top+139,22,22,blue);
  }
  const headingLimit=Math.min(120,...title.map(t=>{font(120,true);return Math.floor(902*120/ctx.measureText(t).width)}));
  const size=index===3?54:index>0&&position<slides.length-1?Math.round(headingLimit*.82):headingLimit;
  font(size,true);
- let y=index<=0?650:index===3?384:455;
+ let y=index===-1?760+size*.82:index===0?650:index===3?384:455;
  title.forEach((t,i)=>{if(index!==4&&i===title.length-1){const width=ctx.measureText(t).width+26,top=y-size*.82;box(72,top,width,size,sky);
   for(const [edge,handleY] of [[72,top],[72+width,top+size]]){box(edge-2,top,4,size,'#2469da');ctx.beginPath();ctx.arc(edge,handleY,9,0,2*Math.PI);ctx.fillStyle='#2469da';ctx.fill();}}
   label(t,index===4?76:82,y,blue);y+=size*(index<=0?1.12:.99);});
