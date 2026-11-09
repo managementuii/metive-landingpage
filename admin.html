@@ -183,6 +183,11 @@ function draw(position){
  logo(logos[0],306,137,255,90);box(583,150,2,60,'#aab3c3');logo(logos[1],610,137,150,90);
  font(29,true);
  label('Rekrutmen Metive 5.0 (2027)',76,index<=0?460:319,blue);
+ if(index===-1){
+  panel(78,488,123,58,sky,false);
+  box(81,491,117,9,blue);
+  font(31,true);label('18:00',96,534,blue);
+ }
  const headingLimit=Math.min(120,...title.map(t=>{font(120,true);return Math.floor(902*120/ctx.measureText(t).width)}));
  const size=index===3?54:index>0&&position<slides.length-1?Math.round(headingLimit*.82):headingLimit;
  font(size,true);
@@ -207,9 +212,6 @@ function draw(position){
   box(76,1616,928,3,blue);copy(footer,76,1687,928,33,true,blue);
  }else if(index===-1){
   copy(footer,78,introBottom+60,924,40,true,blue);
-  ctx.save();
-  ctx.strokeStyle='#a6bad7';ctx.lineWidth=3;ctx.setLineDash([12,10]);
-  ctx.beginPath();ctx.roundRect(78,introBottom+115,924,260,24);ctx.stroke();ctx.restore();
  }else if(footer&&index!==4&&index!==5&&index!==7){
   box(76,1616,928,3,blue);font(33,true);label(footer,76,1687,blue);
  }
