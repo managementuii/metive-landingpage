@@ -60,8 +60,13 @@ function storyBody(index,rows){
   rows.forEach(([head],i)=>{const left=116+i*302;folder(left+43,1132,1.2);copy(head,left,1297,250,34,true,blue)});
  }else if(index===1){
   panel(x,705,w,170,blue);
-  font(96,true);label('15+',106,825,yellow);
-  copy('Kegiatan kita garap sepanjang 2026',350,782,620,43,true,'white');
+  font(25,true);label('Metive dalam angka · 2026',104,744,'white');
+  const stats=[['200+','Konten kita bikin'],['15+','Kegiatan kita garap'],['10+','Skill kita eksplor']];
+  stats.forEach(([number,description],i)=>{
+   const left=104+i*302;
+   font(64,true);label(number,left,813,yellow);
+   font(27);label(description,left,852,'white');
+  });
   panel(76,927,366,646,blue);
   ctx.clearRect(79,930,360,640);
   font(42,true);label('Yang kita garap',472,975,blue);
