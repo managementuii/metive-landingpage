@@ -103,10 +103,10 @@ function storyBody(index,rows){
   ctx.clearRect(270,512,540,960);
  }else if(index===4){
   rows.forEach(([heading,description,keywords],i)=>{
-   const top=720+i*328;
+   const top=683+i*281;
    const inset=36;
    function roundedCard(dx,dy,fill){
-    ctx.beginPath();ctx.roundRect(x+dx,top+dy,w,302,22);
+    ctx.beginPath();ctx.roundRect(x+dx,top+dy,w,260,22);
     ctx.fillStyle=fill;ctx.fill();
    }
    roundedCard(7,8,'#d5dfef');
@@ -115,11 +115,17 @@ function storyBody(index,rows){
    ctx.font='27px monospace';label(heading,x+inset,top+43,ink);
    label('↗',x+w-inset-ctx.measureText('↗').width,top+43,ink);
    box(x+1,top+62,w-2,2,ink);
-   font(47,true);label(heading,x+inset,top+137,ink);
-   font(34);label(description,x+inset,top+196,'#5c6779');
-   box(x+inset,top+235,w-2*inset,2,'#c7cbd1');
-   font(25,true);label(keywords,x+inset,top+278,ink);
+   font(47,true);label(heading,x+inset,top+121,ink);
+   font(34);label(description,x+inset,top+173,'#5c6779');
+   box(x+inset,top+201,w-2*inset,2,'#c7cbd1');
+   font(25,true);label(keywords,x+inset,top+238,ink);
   });
+  panel(x,1542,w,136,paper,false);
+  font(34,true);label('Cari detail lengkap',x+32,1622,blue);
+  ctx.save();
+  ctx.strokeStyle='#8c9fba';ctx.lineWidth=2;ctx.setLineDash([9,7]);
+  ctx.beginPath();ctx.roundRect(x+410,1562,w-438,96,15);ctx.stroke();
+  ctx.restore();
  }else if(index===5){
   panel(x,852,w,688,'white');rows.forEach(([head,body],i)=>{const y=855+i*170;if(i===0)box(x+3,y,w-6,169,'#fff4aa');if(i)box(x+3,y,w-6,2,'#c2cdde');
    ctx.beginPath();ctx.moveTo(107,y+58);ctx.lineTo(122,y+72);ctx.lineTo(154,y+36);ctx.strokeStyle=blue;ctx.lineWidth=7;ctx.stroke();
@@ -170,7 +176,7 @@ function draw(index){
  }else if(footer&&index!==4){
   box(76,1616,928,3,blue);font(33,true);label(footer,76,1687,blue);
  }
- const caption='Poster '+(index+1)+' dari '+slides.length+' · '+name;document.getElementById('caption').textContent=index===1?caption+' · Area kotak-kotak di kiri untuk klip 9:16.':index===3?caption+' · Area kotak-kotak di tengah untuk video tim 9:16.':caption;canvas.setAttribute('aria-label',[...title,intro,...rows.flat(),footer].join('. '));
+ const caption='Poster '+(index+1)+' dari '+slides.length+' · '+name;document.getElementById('caption').textContent=index===1?caption+' · Area kotak-kotak di kiri untuk klip 9:16.':index===3?caption+' · Area kotak-kotak di tengah untuk video tim 9:16.':index===4?caption+' · Saat unggah Story, letakkan stiker Tautan di kotak kosong.':caption;canvas.setAttribute('aria-label',[...title,intro,...rows.flat(),footer].join('. '));
  [...nav.children].forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));statusLine.textContent='';
 }
 slides.forEach(([name],i)=>{const b=document.createElement('button');b.type='button';b.disabled=true;b.textContent=String(i+1).padStart(2,'0')+'  '+name;b.onclick=()=>draw(i);nav.append(b)});
