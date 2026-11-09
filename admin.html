@@ -31,24 +31,78 @@ function lines(value,width){
  if(line)result.push(line);return result;
 }
 function logo(image,x,y,width,height){const scale=Math.min(width/image.width,height/image.height);ctx.drawImage(image,x+(width-image.width*scale)/2,y+(height-image.height*scale)/2,image.width*scale,image.height*scale)}
+const iconSources=["<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"104\" height=\"104\" viewBox=\"0 0 52 52\" fill=\"none\" stroke=\"#193c91\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><circle cx=\"24\" cy=\"25\" r=\"17\" fill=\"#fff9ca\"/><circle cx=\"18\" cy=\"21\" r=\"1.7\" fill=\"#193c91\" stroke=\"none\"/><circle cx=\"30\" cy=\"21\" r=\"1.7\" fill=\"#193c91\" stroke=\"none\"/><path d=\"M17 29q7 10 14 0\"/><path d=\"m42 4 1.5 5.5L49 11l-5.5 1.5L42 18l-1.5-5.5L35 11l5.5-1.5z\" fill=\"#fff\"/></svg>","<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"104\" height=\"104\" viewBox=\"0 0 52 52\" fill=\"none\" stroke=\"#193c91\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><rect x=\"7\" y=\"7\" width=\"35\" height=\"25\" rx=\"3\" fill=\"#fff\"/><path d=\"M11 12h27v15H11z\" fill=\"#fff16b\"/><path d=\"M24 32v7M16 39h16M3 41h43M7 41v7M42 41v7\"/><path d=\"m16 22 5-5 5 5 6-7\" /></svg>","<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"104\" height=\"104\" viewBox=\"0 0 52 52\" fill=\"none\" stroke=\"#193c91\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M5 7h30v23H20L10 38v-8H5z\" fill=\"#bcdcff\"/><path d=\"M35 18h11v24h-8v6l-8-6H22v-6\" fill=\"#fff16b\"/><path d=\"M12 15h16M12 22h11\"/></svg>","<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"104\" height=\"104\" viewBox=\"0 0 52 52\" fill=\"none\" stroke=\"#193c91\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M5 14h16l5 5h20v26H5z\" fill=\"#bcdcff\"/><path d=\"M14 22V5h23v25H14z\" fill=\"#fff\"/><path d=\"M20 12h11M20 18h8\"/><path d=\"M5 24h41l-5 21H5z\" fill=\"#fff16b\"/><path d=\"M12 31h15\"/></svg>"].map(svg=>'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg));
+let icons=[];
+function panel(x,y,w,h,fill,shadow=true){
+ if(shadow)box(x+9,y+10,w,h,'#b7c7db');
+ box(x,y,w,h,ink);box(x+3,y+3,w-6,h-6,fill);
+}
+function copy(value,x,y,width,size=34,bold=false,color=ink){
+ font(size,bold);const wrapped=lines(value,width);
+ wrapped.forEach((line,i)=>label(line,x,y+i*size*1.24,color));
+ return y+wrapped.length*size*1.24;
+}
+function folder(x,y,scale=1){
+ ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+ box(5,7,130,87,blue);box(0,0,130,87,ink);box(3,3,124,81,'#ffed73');
+ box(0,-17,56,22,ink);box(3,-14,50,18,'#ffed73');
+ box(3,16,124,3,'#ad8c2a');ctx.restore();
+}
+function windowBar(x,y,w,title){
+ box(x,y,w,60,blue);font(29,true);label(title,x+23,y+40,'white');
+ for(let i=0;i<3;i++) {panel(x+w-138+i*42,y+13,32,32,paper,false);font(22);label(['−','□','×'][i],x+w-131+i*42,y+38,ink);}
+}
+function storyBody(index,rows){
+ const x=76,w=928;
+ if(index===0){
+  panel(x,793,w,579,'white');windowBar(x+3,796,w-6,'Divisi Metive');
+  font(59,true);label('Dari tertarik,',110,947,blue);label('jadi ikut bikin.',110,1014,blue);
+  rows.forEach(([head],i)=>{const left=116+i*302;folder(left+43,1132,1.2);copy(head,left,1297,250,34,true,blue)});
+ }else if(index===1){
+  panel(x,685,w,238,blue);font(29);label('Metive dalam angka · 2026',104,744,'white');
+  [['200+','konten'],['15+','kegiatan'],['10+','skill']].forEach(([n,k],i)=>{font(76,true);label(n,104+i*303,835,yellow);font(31);label(k,106+i*303,887,'white')});
+  rows.forEach(([head,body],i)=>{const y=966+i*166;panel(x,y,w,144,i===0?sky:'white');font(38,true);label(head,x+27,y+60,blue);copy(body,x+27,y+111,w-54,30)});
+ }else if(index===2){
+  rows.forEach(([head,body],i)=>{const left=x+(i%2)*477,top=769+Math.floor(i/2)*345;const dark=i===3;
+   panel(left,top,448,321,[yellow,sky,'white',blue][i]);ctx.drawImage(icons[[1,2,3,0][i]],left+24,top+23,76,76);
+   const bottom=copy(head,left+24,top+150,400,40,true,dark?'white':blue);
+   copy(body,left+24,bottom+6,396,30,false,dark?'white':ink);});
+ }else if(index===3){
+  rows.forEach(([head,body],i)=>{const y=824+i*234;panel(x,y,w,205,'white');windowBar(x+3,y+3,w-6,head);folder(x+40,y+110,.7);copy(body,x+180,y+124,w-220,34)});
+ }else if(index===4){
+  panel(x,812,w,640,'white');rows.forEach(([head,body],i)=>{const y=815+i*158;if(i===0)box(x+3,y,w-6,157,'#fff4aa');if(i)box(x+3,y,w-6,2,'#c2cdde');
+   ctx.beginPath();ctx.moveTo(107,y+58);ctx.lineTo(122,y+72);ctx.lineTo(154,y+36);ctx.strokeStyle=blue;ctx.lineWidth=7;ctx.stroke();
+   font(39,true);label(head,184,y+60,blue);copy(body,184,y+111,785,30);});
+ }else if(index===5){
+  panel(99,750,900,779,'#d3e6ff',false);panel(88,765,908,779,paper,false);panel(x,781,914,779,'white');
+  rows.forEach(([date,body],i)=>{const y=785+i*110;const announcement=[1,4,6].includes(i);
+   if(announcement)box(x+3,y,908,109,yellow);if(i)box(x+3,y,908,2,'#b7c5dc');
+   font(36,true);label(date,x+22,y+65,blue);const count=lines(body,645).length;copy(body,x+227,y+(count>1?43:65),646,32);});
+ }else{
+  panel(x,760,w,650,yellow);
+  for(const dx of [0,w])for(const dy of [0,650])panel(x+dx-9,760+dy-9,18,18,'white',false);
+  rows.forEach(([head,body],i)=>{const y=811+i*181;const [num,...words]=head.split(/\s+/);
+   panel(110,y,74,63,blue,false);font(29,true);label(num,129,y+44,'white');
+   copy(words.join(' '),214,y+44,730,42,true,blue);copy(body,214,y+106,712,32);
+   if(i<2)box(110,y+150,858,2,'#a19447');});
+  font(34,true);label('Kenalan & daftar ↗',109,1375,blue);
+ }
+}
 function draw(index){
  current=index;
  const [name,title,intro,rows,footer]=slides[index];
- box(0,0,1080,1920,paper);for(let y=10;y<1920;y+=28)for(let x=12;x<1080;x+=28)box(x,y,2,2,'#ccd3dc');
- logo(logos[0],309,135,255,94);box(585,149,2,62,'#aab3c3');logo(logos[1],610,135,150,94);
- font(30);label('OPEN RECRUITMENT  /  METIVE 5.0',78,320,blue);
- const titleSize=Math.min(112,...title.map(t=>{font(112,true);return Math.floor(112*910/ctx.measureText(t).width)}));font(titleSize,true);
- let y=448;
- title.forEach((t,i)=>{if(i===title.length-1){const w=ctx.measureText(t).width;box(72,y-titleSize*.81,w+26,titleSize*.99,sky);box(72,y-titleSize*.81,4,titleSize*.99,'#2768e7');ctx.beginPath();ctx.arc(74,y-titleSize*.81,8,0,Math.PI*2);ctx.fillStyle='#2768e7';ctx.fill()}label(t,82,y,blue);y+=titleSize+8});
- y+=3;font(36);for(const l of lines(intro,900)){label(l,78,y);y+=48}y+=22;
- const headerY=y;const dense=index===5;
- let contentY=y+86;
- const layout=rows.map(([heading,body])=>{font(dense?30:37,true);const heads=lines(heading,820);font(dense?30:32);const desc=lines(body,820);const top=contentY;contentY+=dense?94:heads.length*45+desc.length*40+32;return {heads,desc,top}});
- box(87,headerY+9,924,contentY-headerY+26,'#bcc6d6');box(76,headerY,924,contentY-headerY+26,ink);box(79,headerY+3,918,contentY-headerY+20,'#fff');box(79,headerY+3,918,61,blue);
- font(28);label(name,106,headerY+44,'white');label('─   □   ×',845,headerY+44,'white');
- layout.forEach(({heads,desc,top},i)=>{let pos=top+28;if(dense){font(29,true);label(heads[0],105,pos,blue);font(29);label(rows[i][1],312,pos,ink)}else{font(37,true);for(const l of heads){label(l,108,pos,blue);pos+=45}font(32);for(const l of desc){label(l,108,pos,ink);pos+=40}}if(i<layout.length-1)box(108,layout[i+1].top-11,856,2,'#dbe1e9')});
- const fy=Math.max(1550,contentY+66);font(33,true);const fw=ctx.measureText(footer).width;box(82,fy+6,fw+46,75,blue);box(76,fy,fw+46,75,yellow);label(footer,99,fy+49,blue);
- if(index===6){font(27);label('Kenalan & daftar ↗',80,fy+156,blue)}
+ box(0,0,1080,1920,paper);
+ for(let y=10;y<1920;y+=27)for(let x=12;x<1080;x+=27)box(x,y,2,2,'#b6c3d5');
+ logo(logos[0],306,137,255,90);box(583,150,2,60,'#aab3c3');logo(logos[1],610,137,150,90);
+ font(29,true);label('OPEN RECRUITMENT  /  METIVE 5.0',76,319,blue);
+ const size=Math.min(120,...title.map(t=>{font(120,true);return Math.floor(902*120/ctx.measureText(t).width)}));font(size,true);
+ let y=455;
+ title.forEach((t,i)=>{if(i===title.length-1){const width=ctx.measureText(t).width+26,top=y-size*.82;box(72,top,width,size,sky);
+  for(const [edge,handleY] of [[72,top],[72+width,top+size]]){box(edge-2,top,4,size,'#2469da');ctx.beginPath();ctx.arc(edge,handleY,9,0,2*Math.PI);ctx.fillStyle='#2469da';ctx.fill();}}
+  label(t,82,y,blue);y+=size*.99;});
+ copy(intro,78,y-29,924,35);
+ storyBody(index,rows);
+ box(76,1616,928,3,blue);font(33,true);label(footer,76,1687,blue);
  const caption='Poster '+(index+1)+' dari 7 · '+name;document.getElementById('caption').textContent=caption;canvas.setAttribute('aria-label',[...title,intro,...rows.flat(),footer].join('. '));
  [...nav.children].forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));statusLine.textContent='';
 }
@@ -57,6 +111,7 @@ download.onclick=()=>{const number=current+1;canvas.toBlob(blob=>{if(!blob){stat
 async function init(){
  await Promise.all([document.fonts.load('700 40px "Space Grotesk"'),document.fonts.load('600 40px "DM Sans"')]);
  logos=await Promise.all(logoSources.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src})));
+ icons=await Promise.all(iconSources.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src})));
  draw(0);download.disabled=false;[...nav.children].forEach(b=>b.disabled=false);
 }
 init().catch(()=>{statusLine.textContent='Poster belum bisa dimuat. Muat ulang halaman.'});
