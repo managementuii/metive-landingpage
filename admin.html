@@ -115,13 +115,13 @@ function storyBody(index,rows){
    ctx.font='27px monospace';label(heading,x+inset,top+43,ink);
    label('↗',x+w-inset-ctx.measureText('↗').width,top+43,ink);
    box(x+1,top+62,w-2,2,ink);
-   font(47,true);label(heading,x+inset,top+121,ink);
-   font(34);label(description,x+inset,top+173,'#5c6779');
+   font(40,true);label(heading,x+inset,top+121,ink);
+   font(31);label(description,x+inset,top+173,'#5c6779');
    box(x+inset,top+201,w-2*inset,2,'#c7cbd1');
    font(25,true);label(keywords,x+inset,top+238,ink);
   });
   panel(x,1542,w,136,paper,false);
-  font(34,true);label('Cari detail lengkap',x+32,1622,blue);
+  font(29,true);label('Cari detail lengkap',x+32,1622,blue);
   ctx.save();
   ctx.strokeStyle='#8c9fba';ctx.lineWidth=2;ctx.setLineDash([9,7]);
   ctx.beginPath();ctx.roundRect(x+410,1562,w-438,96,15);ctx.stroke();
